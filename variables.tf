@@ -15,10 +15,12 @@ variable "cluster_max_size" {
 }
 
 variable "cluster_desired_capacity" {
-  default = "2"
+  default = "3"
 }
 
-variable "aws_region" {}
+variable "aws_region" {
+  default = "eu-west-1"
+}
 
 variable "aws_ec2_instance_type" {
   default = "t2.micro"

@@ -1,5 +1,5 @@
 data "template_file" "user_data" {
-  template = "${file("${path.module}/user_data.sh")}"
+  template = "${file("${path.module}/user-data.yml")}"
 
   vars {
     region            = "${var.aws_region}"
@@ -36,6 +36,16 @@ resource "aws_security_group" "antifragile-systems" {
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+
+    cidr_blocks = [
+      "0.0.0.0/0",
+    ]
   }
 }
 

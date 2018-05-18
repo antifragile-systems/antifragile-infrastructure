@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "eu-west-1"
-}
-
 resource "aws_kms_key" "antifragile-systems" {}
 
 resource "aws_efs_file_system" "antifragile-systems" {
@@ -22,7 +18,7 @@ resource "aws_security_group" "antifragile-systems" {
     create_before_destroy = true
   }
 
-  # NFS
+  # nfs
   ingress {
     from_port = "2049"
     to_port   = "2049"
