@@ -1,4 +1,4 @@
-resource "aws_ecs_cluster" "antifragile-systems" {
+resource "aws_ecs_cluster" "antifragile-infrastructure" {
   name = "${var.name}"
 }
 
@@ -26,7 +26,7 @@ module "servers" {
   aws_autoscaling_group_desired_capacity = "${var.aws_autoscaling_group_desired_capacity}"
 }
 
-resource "aws_security_group_rule" "antifragile-systems" {
+resource "aws_security_group_rule" "antifragile-infrastructure" {
   type                     = "ingress"
   from_port                = 0
   to_port                  = 65535

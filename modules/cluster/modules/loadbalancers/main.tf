@@ -1,4 +1,4 @@
-resource "aws_security_group" "antifragile-systems" {
+resource "aws_security_group" "antifragile-infrastructure" {
   name        = "http"
   description = "http"
   vpc_id      = "${var.aws_vpc_id}"
@@ -29,14 +29,14 @@ resource "aws_security_group" "antifragile-systems" {
   }
 }
 
-resource "aws_alb_target_group" "antifragile-systems" {
+resource "aws_alb_target_group" "antifragile-infrastructure" {
   name     = "${var.name}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${var.aws_vpc_id}"
 }
 
-resource "aws_alb" "antifragile-systems" {
+resource "aws_alb" "antifragile-infrastructure" {
   name = "${var.name}"
 
   subnets = [
@@ -44,17 +44,17 @@ resource "aws_alb" "antifragile-systems" {
   ]
 
   security_groups = [
-    "${aws_security_group.antifragile-systems.id}",
+    "${aws_security_group.antifragile-infrastructure.id}",
   ]
 }
 
-resource "aws_alb_listener" "antifragile-systems" {
-  load_balancer_arn = "${aws_alb.antifragile-systems.id}"
+resource "aws_alb_listener" "antifragile-infrastructure" {
+  load_balancer_arn = "${aws_alb.antifragile-infrastructure.id}"
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_alb_target_group.antifragile-systems.id}"
+    target_group_arn = "${aws_alb_target_group.antifragile-infrastructure.id}"
   }
 }

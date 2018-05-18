@@ -1,15 +1,15 @@
-resource "aws_kms_key" "antifragile-systems" {}
+resource "aws_kms_key" "antifragile-infrastructure" {}
 
-resource "aws_efs_file_system" "antifragile-systems" {
+resource "aws_efs_file_system" "antifragile-infrastructure" {
   encrypted  = "true"
-  kms_key_id = "${aws_kms_key.antifragile-systems.arn}"
+  kms_key_id = "${aws_kms_key.antifragile-infrastructure.arn}"
 
   tags {
     Name = "${var.name}"
   }
 }
 
-resource "aws_security_group" "antifragile-systems" {
+resource "aws_security_group" "antifragile-infrastructure" {
   name        = "efs"
   description = "EFS"
   vpc_id      = "${var.aws_vpc_id}"
@@ -40,12 +40,12 @@ resource "aws_security_group" "antifragile-systems" {
   }
 }
 
-resource "aws_efs_mount_target" "antifragile-systems" {
+resource "aws_efs_mount_target" "antifragile-infrastructure" {
   count          = "3"
-  file_system_id = "${aws_efs_file_system.antifragile-systems.id}"
+  file_system_id = "${aws_efs_file_system.antifragile-infrastructure.id}"
   subnet_id      = "${element(var.aws_vpc_subnet_ids, count.index)}"
 
   security_groups = [
-    "${aws_security_group.antifragile-systems.id}",
+    "${aws_security_group.antifragile-infrastructure.id}",
   ]
 }

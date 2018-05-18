@@ -8,12 +8,12 @@ data "template_file" "user_data" {
   }
 }
 
-resource "aws_key_pair" "antifragile-systems" {
+resource "aws_key_pair" "antifragile-infrastructure" {
   key_name_prefix = "${var.name}."
   public_key      = "${var.aws_ec2_public_key}"
 }
 
-resource "aws_iam_role" "antifragile-systems" {
+resource "aws_iam_role" "antifragile-infrastructure" {
   name_prefix        = "${var.name}."
   assume_role_policy = "${file("${path.module}/ec2-instance-role.json")}"
 }
@@ -21,15 +21,15 @@ resource "aws_iam_role" "antifragile-systems" {
 resource "aws_iam_role_policy" "ec2_instance_role_policy" {
   name_prefix = "${var.name}."
   policy      = "${file("${path.module}/ec2-instance-role-policy.json")}"
-  role        = "${aws_iam_role.antifragile-systems.id}"
+  role        = "${aws_iam_role.antifragile-infrastructure.id}"
 }
 
-resource "aws_iam_instance_profile" "antifragile-systems" {
+resource "aws_iam_instance_profile" "antifragile-infrastructure" {
   name_prefix = "${var.name}."
-  role        = "${aws_iam_role.antifragile-systems.name}"
+  role        = "${aws_iam_role.antifragile-infrastructure.name}"
 }
 
-resource "aws_security_group" "antifragile-systems" {
+resource "aws_security_group" "antifragile-infrastructure" {
   name_prefix = "${var.name}."
   description = "${var.name}"
   vpc_id      = "${var.aws_vpc_id}"
@@ -49,17 +49,17 @@ resource "aws_security_group" "antifragile-systems" {
   }
 }
 
-resource "aws_launch_configuration" "antifragile-systems" {
+resource "aws_launch_configuration" "antifragile-infrastructure" {
   name_prefix = "${var.name}."
 
   security_groups = [
-    "${aws_security_group.antifragile-systems.id}",
+    "${aws_security_group.antifragile-infrastructure.id}",
   ]
 
-  key_name                    = "${aws_key_pair.antifragile-systems.key_name}"
+  key_name                    = "${aws_key_pair.antifragile-infrastructure.key_name}"
   image_id                    = "${var.aws_ec2_ami}"
   instance_type               = "${var.aws_ec2_instance_type}"
-  iam_instance_profile        = "${aws_iam_instance_profile.antifragile-systems.name}"
+  iam_instance_profile        = "${aws_iam_instance_profile.antifragile-infrastructure.name}"
   user_data                   = "${data.template_file.user_data.rendered}"
   associate_public_ip_address = true
 
@@ -68,14 +68,14 @@ resource "aws_launch_configuration" "antifragile-systems" {
   }
 }
 
-resource "aws_autoscaling_group" "antifragile-systems" {
+resource "aws_autoscaling_group" "antifragile-infrastructure" {
   name = "${var.name}"
 
   vpc_zone_identifier = [
     "${var.aws_vpc_subnet_ids}",
   ]
 
-  launch_configuration = "${aws_launch_configuration.antifragile-systems.name}"
+  launch_configuration = "${aws_launch_configuration.antifragile-infrastructure.name}"
   min_size             = "${var.aws_autoscaling_group_min_size}"
   max_size             = "${var.aws_autoscaling_group_max_size}"
   desired_capacity     = "${var.aws_autoscaling_group_desired_capacity}"
