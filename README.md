@@ -1,4 +1,4 @@
-# An :hatching_chick: antifragile :earth_americas: web :office: infrastructure as code
+# An :hatching_chick: antifragile :office: infrastructure as code
 
 ### How to use
 Clone the GitHub repo
