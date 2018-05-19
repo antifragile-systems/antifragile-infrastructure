@@ -37,3 +37,9 @@ module "cluster" {
   aws_autoscaling_group_max_size         = "${var.cluster_max_size}"
   aws_autoscaling_group_desired_capacity = "${var.cluster_desired_capacity}"
 }
+
+module "monitor" {
+  source = "./modules/monitor"
+
+  name = "${var.name}"
+}

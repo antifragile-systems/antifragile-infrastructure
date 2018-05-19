@@ -48,7 +48,7 @@ resource "aws_alb" "antifragile-infrastructure" {
   ]
 }
 
-resource "aws_alb_listener" "antifragile-infrastructure" {
+resource "aws_alb_listener" "antifragile-infrastructure-1" {
   load_balancer_arn = "${aws_alb.antifragile-infrastructure.id}"
   port              = "80"
   protocol          = "HTTP"
