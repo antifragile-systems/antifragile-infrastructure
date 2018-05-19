@@ -39,6 +39,8 @@ resource "aws_alb_target_group" "antifragile-infrastructure" {
 resource "aws_alb" "antifragile-infrastructure" {
   name = "${var.name}"
 
+  internal = false
+
   subnets = [
     "${var.aws_vpc_subnet_ids}",
   ]
@@ -48,7 +50,7 @@ resource "aws_alb" "antifragile-infrastructure" {
   ]
 }
 
-resource "aws_alb_listener" "antifragile-infrastructure-1" {
+resource "aws_alb_listener" "antifragile-infrastructure" {
   load_balancer_arn = "${aws_alb.antifragile-infrastructure.id}"
   port              = "80"
   protocol          = "HTTP"

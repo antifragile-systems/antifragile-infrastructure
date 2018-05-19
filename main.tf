@@ -38,6 +38,13 @@ module "cluster" {
   aws_autoscaling_group_desired_capacity = "${var.cluster_desired_capacity}"
 }
 
+module "api" {
+  source = "./modules/api"
+
+  name   = "${var.name}"
+  domain = "${var.domain}"
+}
+
 module "monitor" {
   source = "./modules/monitor"
 

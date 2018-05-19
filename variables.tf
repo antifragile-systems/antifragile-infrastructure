@@ -2,6 +2,8 @@ variable "name" {
   default = "antifragile-infrastructure"
 }
 
+variable "domain" {}
+
 variable "cidr_block" {}
 
 variable "public_key" {}
