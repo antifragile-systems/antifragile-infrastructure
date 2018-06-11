@@ -2,7 +2,7 @@ variable "name" {
   default = "antifragile-infrastructure"
 }
 
-variable "domain" {}
+variable "domain_name" {}
 
 variable "cidr_block" {}
 

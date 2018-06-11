@@ -1,5 +1,7 @@
 variable "name" {}
 
+variable "domain_name" {}
+
 variable "aws_region" {}
 
 variable "aws_ec2_instance_type" {}

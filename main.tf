@@ -26,6 +26,7 @@ module "cluster" {
   source = "./modules/cluster"
 
   name                                   = "${var.name}"
+  domain_name                            = "${var.domain_name}"
   aws_region                             = "${var.aws_region}"
   aws_ec2_instance_type                  = "${var.aws_ec2_instance_type}"
   aws_ec2_ami                            = "${var.aws_ec2_ami}"
@@ -41,8 +42,8 @@ module "cluster" {
 module "api" {
   source = "./modules/api"
 
-  name   = "${var.name}"
-  domain = "${var.domain}"
+  name        = "${var.name}"
+  domain_name = "${var.domain_name}"
 }
 
 module "monitor" {

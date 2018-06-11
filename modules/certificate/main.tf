@@ -1,10 +1,11 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "${var.aws_region}"
 }
 
 resource "aws_acm_certificate" "antifragile-infrastructure" {
-  domain_name       = "${var.hostname}"
-  validation_method = "DNS"
+  domain_name               = "${var.domain_name}"
+  subject_alternative_names = "${var.subject_alternative_names}"
+  validation_method         = "DNS"
 }
 
 resource "aws_route53_record" "antifragile-infrastructure" {

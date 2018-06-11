@@ -2,12 +2,14 @@ resource "aws_ecs_cluster" "antifragile-infrastructure" {
   name = "${var.name}"
 }
 
-module "loadbalancers" {
-  source = "./modules/loadbalancers"
+module "loadbalancer" {
+  source = "./modules/loadbalancer"
 
   name               = "${var.name}"
+  domain_name        = "${var.domain_name}"
   aws_vpc_id         = "${var.aws_vpc_id}"
   aws_vpc_subnet_ids = "${var.aws_vpc_subnet_ids}"
+  aws_region         = "${var.aws_region}"
 }
 
 module "servers" {
@@ -31,6 +33,6 @@ resource "aws_security_group_rule" "antifragile-infrastructure" {
   from_port                = 0
   to_port                  = 65535
   protocol                 = "tcp"
-  source_security_group_id = "${module.loadbalancers.aws_alb_security_group_id}"
+  source_security_group_id = "${module.loadbalancer.aws_alb_security_group_id}"
   security_group_id        = "${module.servers.aws_launch_configuration_security_group_id}"
 }

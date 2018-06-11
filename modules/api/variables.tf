@@ -1,3 +1,3 @@
 variable "name" {}
 
-variable "domain" {}
+variable "domain_name" {}
