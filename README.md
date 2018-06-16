@@ -25,3 +25,6 @@ Perform Terraform actions
 ```
 terraform apply -auto-approve
 ```
+
+### Used by
+* [get-me-a-date](https://github.com/hfreire/get-me-a-date) - :heart_eyes: Help me get a :cupid: date tonight :first_quarter_moon_with_face:
