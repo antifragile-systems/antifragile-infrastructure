@@ -24,8 +24,8 @@ resource "aws_security_group" "antifragile-infrastructure" {
     to_port   = "2049"
     protocol  = "tcp"
 
-    cidr_blocks = [
-      "${var.aws_cidr_block}",
+    security_groups = [
+      "${var.aws_vpc_default_security_group_id}",
     ]
   }
 

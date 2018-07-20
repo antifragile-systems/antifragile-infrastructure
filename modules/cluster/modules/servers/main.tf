@@ -62,6 +62,7 @@ resource "aws_launch_configuration" "antifragile-infrastructure" {
   iam_instance_profile        = "${aws_iam_instance_profile.antifragile-infrastructure.name}"
   user_data                   = "${data.template_file.user_data.rendered}"
   associate_public_ip_address = true
+  spot_price                  = "0.0126"
 
   lifecycle {
     create_before_destroy = true

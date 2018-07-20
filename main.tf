@@ -18,10 +18,11 @@ module "network" {
 module "storage" {
   source = "./modules/storage"
 
-  name               = "${var.name}"
-  aws_vpc_id         = "${module.network.aws_vpc_id}"
-  aws_vpc_subnet_ids = "${module.network.aws_vpc_subnet_ids}"
-  aws_cidr_block     = "${var.cidr_block}"
+  name                              = "${var.name}"
+  aws_vpc_id                        = "${module.network.aws_vpc_id}"
+  aws_vpc_subnet_ids                = "${module.network.aws_vpc_subnet_ids}"
+  aws_cidr_block                    = "${var.cidr_block}"
+  aws_vpc_default_security_group_id = "${module.network.aws_vpc_default_security_group_id}"
 }
 
 module "cluster" {

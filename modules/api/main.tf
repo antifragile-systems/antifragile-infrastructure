@@ -55,6 +55,10 @@ resource "aws_api_gateway_integration_response" "antifragile-infrastructure" {
 }
 
 resource "aws_api_gateway_deployment" "antifragile-infrastructure" {
+  depends_on = [
+    "aws_api_gateway_integration.antifragile-infrastructure",
+  ]
+
   rest_api_id = "${aws_api_gateway_rest_api.antifragile-infrastructure.id}"
   stage_name  = "production"
 }
@@ -63,6 +67,18 @@ resource "aws_api_gateway_stage" "antifragile-infrastructure" {
   stage_name    = "production"
   rest_api_id   = "${aws_api_gateway_rest_api.antifragile-infrastructure.id}"
   deployment_id = "${aws_api_gateway_deployment.antifragile-infrastructure.id}"
+
+  variables = {
+    "deployed_at" = "${timestamp()}"
+    "host"        = "api.${var.domain_name}"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      "deployment_id",
+      "variables.deployed_at",
+    ]
+  }
 }
 
 resource "aws_api_gateway_domain_name" "antifragile-infrastructure" {
