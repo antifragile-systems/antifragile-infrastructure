@@ -1,4 +1,11 @@
-resource "aws_kms_key" "antifragile-infrastructure" {}
+resource "aws_kms_key" "antifragile-infrastructure" {
+  enable_key_rotation = "true"
+}
+
+resource "aws_kms_alias" "antifragile-infrastructure" {
+  name          = "alias/antifragile-infrastructure/elasticfilesystem"
+  target_key_id = "${aws_kms_key.antifragile-infrastructure.key_id}"
+}
 
 resource "aws_efs_file_system" "antifragile-infrastructure" {
   encrypted  = "true"
