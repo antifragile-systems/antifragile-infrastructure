@@ -2,13 +2,20 @@
   "Version": "2008-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
+      "Sid": "",
+      "Effect": "Allow",
       "Principal": {
-        "Service": [
-          "ec2.amazonaws.com"
-        ]
+        "Service": "ec2.amazonaws.com"
       },
-      "Effect": "Allow"
+      "Action": "sts:AssumeRole"
+    },
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }
