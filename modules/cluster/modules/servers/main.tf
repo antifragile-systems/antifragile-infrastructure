@@ -14,17 +14,17 @@ resource "aws_key_pair" "antifragile-infrastructure" {
 }
 
 resource "aws_iam_role" "antifragile-infrastructure" {
-  name_prefix        = "${var.name}."
-  assume_role_policy = "${file("${path.module}/ec2-instance-role.json")}"
+  name               = "${var.name}.ECSInstanceRole"
+  assume_role_policy = "${file("${path.module}/ecs-instance-role.json")}"
 }
 
 resource "aws_iam_role_policy_attachment" "antifragile-infrastructure-1" {
-  role      = "${aws_iam_role.antifragile-infrastructure.name}"
+  role       = "${aws_iam_role.antifragile-infrastructure.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
 resource "aws_iam_role_policy_attachment" "antifragile-infrastructure-2" {
-  role      = "${aws_iam_role.antifragile-infrastructure.name}"
+  role       = "${aws_iam_role.antifragile-infrastructure.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
@@ -43,9 +43,9 @@ resource "aws_security_group" "antifragile-infrastructure" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
 
     cidr_blocks = [
       "0.0.0.0/0",
@@ -54,9 +54,9 @@ resource "aws_security_group" "antifragile-infrastructure" {
 }
 
 resource "aws_launch_configuration" "antifragile-infrastructure" {
-  name_prefix                 = "${var.name}."
+  name_prefix = "${var.name}."
 
-  security_groups             = [
+  security_groups = [
     "${aws_security_group.antifragile-infrastructure.id}",
   ]
 
@@ -74,9 +74,9 @@ resource "aws_launch_configuration" "antifragile-infrastructure" {
 }
 
 resource "aws_autoscaling_group" "antifragile-infrastructure" {
-  name                 = "${var.name}"
+  name = "${var.name}"
 
-  vpc_zone_identifier  = [
+  vpc_zone_identifier = [
     "${var.aws_vpc_subnet_ids}",
   ]
 
