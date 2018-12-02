@@ -28,6 +28,12 @@ module "servers" {
   aws_autoscaling_group_desired_capacity = "${var.aws_autoscaling_group_desired_capacity}"
 }
 
+module "services" {
+  source = "./modules/services"
+
+  name                                   = "${var.name}"
+}
+
 resource "aws_security_group_rule" "antifragile-infrastructure" {
   type                     = "ingress"
   from_port                = 0
