@@ -1,6 +1,6 @@
 resource "aws_security_group" "antifragile-infrastructure" {
   name        = "${var.name}.loadbalancer"
-  description = "loadbalancer security group"
+  description = "loadbalancer"
   vpc_id      = "${var.aws_vpc_id}"
 
   lifecycle {
