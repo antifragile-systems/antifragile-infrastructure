@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "antifragile-infrastructure" {
 }
 
 module "loadbalancer" {
-  source = "./modules/loadbalancer"
+  source             = "./modules/loadbalancer"
 
   name               = "${var.name}"
   domain_name        = "${var.domain_name}"
@@ -13,7 +13,7 @@ module "loadbalancer" {
 }
 
 module "servers" {
-  source = "./modules/servers"
+  source                                 = "./modules/servers"
 
   name                                   = "${var.name}"
   aws_region                             = "${var.aws_region}"
@@ -29,9 +29,11 @@ module "servers" {
 }
 
 module "services" {
-  source = "./modules/services"
+  source      = "./modules/services"
 
-  name                                   = "${var.name}"
+  name        = "${var.name}"
+  domain_name = "${var.domain_name}"
+  aws_vpc_id  = "${var.aws_vpc_id}"
 }
 
 resource "aws_security_group_rule" "antifragile-infrastructure" {
