@@ -25,9 +25,9 @@ variable "aws_region" {
 }
 
 variable "aws_ec2_instance_type" {
-  default = "t2.micro"
+  default = "t3.micro"
 }
 
 variable "aws_ec2_ami" {
-  default = "ami-2d386654"
+  default = "ami-0627e141ce928067c"
 }
