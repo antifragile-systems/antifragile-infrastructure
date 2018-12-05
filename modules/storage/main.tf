@@ -17,8 +17,8 @@ resource "aws_efs_file_system" "antifragile-infrastructure" {
 }
 
 resource "aws_security_group" "antifragile-infrastructure" {
-  name        = "efs"
-  description = "EFS"
+  name_prefix = "${var.name}.efs."
+  description = "${var.name} efs security group"
   vpc_id      = "${var.aws_vpc_id}"
 
   lifecycle {

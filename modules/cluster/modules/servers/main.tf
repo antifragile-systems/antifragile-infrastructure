@@ -29,7 +29,7 @@ resource "aws_iam_instance_profile" "antifragile-infrastructure" {
 }
 
 resource "aws_security_group" "antifragile-infrastructure" {
-  name_prefix = "${var.name}."
+  name_prefix = "${var.name}.servers."
   description = "${var.name}"
   vpc_id      = "${var.aws_vpc_id}"
 

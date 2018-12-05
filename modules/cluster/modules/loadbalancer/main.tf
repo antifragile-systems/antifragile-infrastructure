@@ -1,6 +1,6 @@
 resource "aws_security_group" "antifragile-infrastructure" {
-  name        = "${var.name}.loadbalancer"
-  description = "loadbalancer"
+  name_prefix = "${var.name}.loadbalancer."
+  description = "${var.name} loadbalancer security group"
   vpc_id      = "${var.aws_vpc_id}"
 
   lifecycle {
@@ -12,16 +12,6 @@ resource "aws_security_group" "antifragile-infrastructure" {
     from_port = "80"
     to_port   = "80"
     protocol  = "tcp"
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
-
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
 
     cidr_blocks = [
       "0.0.0.0/0",
