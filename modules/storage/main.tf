@@ -24,27 +24,6 @@ resource "aws_security_group" "antifragile-infrastructure" {
   lifecycle {
     create_before_destroy = true
   }
-
-  # nfs
-  ingress {
-    from_port = "2049"
-    to_port   = "2049"
-    protocol  = "tcp"
-
-    security_groups = [
-      "${var.aws_vpc_default_security_group_id}",
-    ]
-  }
-
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
 }
 
 resource "aws_efs_mount_target" "antifragile-infrastructure" {

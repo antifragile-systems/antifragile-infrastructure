@@ -27,7 +27,6 @@ module "storage" {
   aws_vpc_id                        = "${module.network.aws_vpc_id}"
   aws_vpc_subnet_ids                = "${module.network.aws_vpc_subnet_ids}"
   aws_cidr_block                    = "${var.cidr_block}"
-  aws_vpc_default_security_group_id = "${module.network.aws_vpc_default_security_group_id}"
 }
 
 module "cluster" {
@@ -45,6 +44,16 @@ module "cluster" {
   aws_autoscaling_group_min_size         = "${var.cluster_min_size}"
   aws_autoscaling_group_max_size         = "${var.cluster_max_size}"
   aws_autoscaling_group_desired_capacity = "${var.cluster_desired_capacity}"
+}
+
+resource "aws_security_group_rule" "antifragile-infrastructure" {
+  type                     = "ingress"
+  from_port                = 2049
+  # nfs
+  to_port                  = 2049
+  protocol                 = "tcp"
+  source_security_group_id = "${module.cluster.aws_launch_configuration_security_group_id}"
+  security_group_id        = "${module.storage.aws_efs_security_group_id}"
 }
 
 module "api" {
