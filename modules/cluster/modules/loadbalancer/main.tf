@@ -9,12 +9,16 @@ resource "aws_security_group" "antifragile-infrastructure" {
 
   # http
   ingress {
-    from_port = "80"
-    to_port   = "80"
-    protocol  = "tcp"
+    from_port        = "80"
+    to_port          = "80"
+    protocol         = "tcp"
 
-    cidr_blocks = [
-      "0.0.0.0/0",
+    cidr_blocks      = [
+      "0.0.0.0/0"
+    ]
+
+    ipv6_cidr_blocks = [
+      "::/0"
     ]
   }
 }
@@ -27,11 +31,11 @@ resource "aws_alb_target_group" "antifragile-infrastructure" {
 }
 
 resource "aws_alb" "antifragile-infrastructure" {
-  name = "${var.name}"
+  name            = "${var.name}"
 
-  internal = false
+  internal        = false
 
-  subnets = [
+  subnets         = [
     "${var.aws_vpc_subnet_ids}",
   ]
 
