@@ -10,7 +10,7 @@ variable "aws_ec2_public_key" {}
 
 variable "aws_vpc_id" {}
 
-variable "aws_vpc_subnet_ids" {
+variable "aws_vpc_private_subnet_ids" {
   type = "list"
 }
 

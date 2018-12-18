@@ -14,23 +14,23 @@ provider "template" {
 }
 
 module "network" {
-  source = "./modules/network"
+  source         = "./modules/network"
 
   name           = "${var.name}"
   aws_cidr_block = "${var.cidr_block}"
 }
 
 module "storage" {
-  source = "./modules/storage"
+  source                     = "./modules/storage"
 
-  name                              = "${var.name}"
-  aws_vpc_id                        = "${module.network.aws_vpc_id}"
-  aws_vpc_subnet_ids                = "${module.network.aws_vpc_subnet_ids}"
-  aws_cidr_block                    = "${var.cidr_block}"
+  name                       = "${var.name}"
+  aws_vpc_id                 = "${module.network.aws_vpc_id}"
+  aws_vpc_private_subnet_ids = "${module.network.aws_vpc_private_subnet_ids}"
+  aws_cidr_block             = "${var.cidr_block}"
 }
 
 module "cluster" {
-  source = "./modules/cluster"
+  source                                 = "./modules/cluster"
 
   name                                   = "${var.name}"
   domain_name                            = "${var.domain_name}"
@@ -39,7 +39,8 @@ module "cluster" {
   aws_ec2_ami                            = "${var.aws_ec2_ami}"
   aws_ec2_public_key                     = "${var.public_key}"
   aws_vpc_id                             = "${module.network.aws_vpc_id}"
-  aws_vpc_subnet_ids                     = "${module.network.aws_vpc_subnet_ids}"
+  aws_vpc_private_subnet_ids             = "${module.network.aws_vpc_private_subnet_ids}"
+  aws_vpc_public_subnet_ids              = "${module.network.aws_vpc_public_subnet_ids}"
   aws_efs_file_system_id                 = "${module.storage.aws_efs_file_system_id}"
   aws_autoscaling_group_min_size         = "${var.cluster_min_size}"
   aws_autoscaling_group_max_size         = "${var.cluster_max_size}"
@@ -57,7 +58,7 @@ resource "aws_security_group_rule" "antifragile-infrastructure" {
 }
 
 module "api" {
-  source = "./modules/api"
+  source      = "./modules/api"
 
   name        = "${var.name}"
   domain_name = "${var.domain_name}"
@@ -66,5 +67,5 @@ module "api" {
 module "monitor" {
   source = "./modules/monitor"
 
-  name = "${var.name}"
+  name   = "${var.name}"
 }

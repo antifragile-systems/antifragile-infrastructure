@@ -72,7 +72,7 @@ resource "aws_autoscaling_group" "antifragile-infrastructure" {
   name = "${var.name}"
 
   vpc_zone_identifier = [
-    "${var.aws_vpc_subnet_ids}",
+    "${var.aws_vpc_private_subnet_ids}",
   ]
 
   launch_configuration = "${aws_launch_configuration.antifragile-infrastructure.name}"

@@ -36,7 +36,7 @@ resource "aws_alb" "antifragile-infrastructure" {
   internal        = false
 
   subnets         = [
-    "${var.aws_vpc_subnet_ids}",
+    "${var.aws_vpc_public_subnet_ids}",
   ]
 
   security_groups = [

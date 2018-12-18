@@ -3,13 +3,13 @@ resource "aws_ecs_cluster" "antifragile-infrastructure" {
 }
 
 module "loadbalancer" {
-  source             = "./modules/loadbalancer"
+  source                    = "./modules/loadbalancer"
 
-  name               = "${var.name}"
-  domain_name        = "${var.domain_name}"
-  aws_vpc_id         = "${var.aws_vpc_id}"
-  aws_vpc_subnet_ids = "${var.aws_vpc_subnet_ids}"
-  aws_region         = "${var.aws_region}"
+  name                      = "${var.name}"
+  domain_name               = "${var.domain_name}"
+  aws_vpc_id                = "${var.aws_vpc_id}"
+  aws_vpc_public_subnet_ids = "${var.aws_vpc_public_subnet_ids}"
+  aws_region                = "${var.aws_region}"
 }
 
 module "servers" {
@@ -21,7 +21,7 @@ module "servers" {
   aws_ec2_ami                            = "${var.aws_ec2_ami}"
   aws_ec2_public_key                     = "${var.aws_ec2_public_key}"
   aws_vpc_id                             = "${var.aws_vpc_id}"
-  aws_vpc_subnet_ids                     = "${var.aws_vpc_subnet_ids}"
+  aws_vpc_private_subnet_ids             = "${var.aws_vpc_private_subnet_ids}"
   aws_efs_file_system_id                 = "${var.aws_efs_file_system_id}"
   aws_autoscaling_group_min_size         = "${var.aws_autoscaling_group_min_size}"
   aws_autoscaling_group_max_size         = "${var.aws_autoscaling_group_max_size}"
