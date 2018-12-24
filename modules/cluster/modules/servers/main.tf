@@ -8,11 +8,6 @@ data "template_file" "user_data" {
   }
 }
 
-resource "aws_key_pair" "antifragile-infrastructure" {
-  key_name_prefix = "${var.name}."
-  public_key      = "${var.aws_ec2_public_key}"
-}
-
 resource "aws_iam_role" "antifragile-infrastructure" {
   name               = "${var.name}.ECSInstanceRole"
   assume_role_policy = "${file("${path.module}/ecs-instance-role.json")}"
@@ -38,9 +33,9 @@ resource "aws_security_group" "antifragile-infrastructure" {
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
 
     cidr_blocks = [
       "0.0.0.0/0",
@@ -49,19 +44,18 @@ resource "aws_security_group" "antifragile-infrastructure" {
 }
 
 resource "aws_launch_configuration" "antifragile-infrastructure" {
-  name_prefix = "${var.name}."
+  name_prefix          = "${var.name}."
 
-  security_groups = [
+  security_groups      = [
     "${aws_security_group.antifragile-infrastructure.id}",
   ]
 
-  key_name                    = "${aws_key_pair.antifragile-infrastructure.key_name}"
-  image_id                    = "${var.aws_ec2_ami}"
-  instance_type               = "${var.aws_ec2_instance_type}"
-  iam_instance_profile        = "${aws_iam_instance_profile.antifragile-infrastructure.name}"
-  user_data                   = "${data.template_file.user_data.rendered}"
-  associate_public_ip_address = true
-  spot_price                  = "0.0126"
+  key_name             = "${var.aws_ec2_public_key_name}"
+  image_id             = "${var.aws_ec2_ami}"
+  instance_type        = "${var.aws_ec2_instance_type}"
+  iam_instance_profile = "${aws_iam_instance_profile.antifragile-infrastructure.name}"
+  user_data            = "${data.template_file.user_data.rendered}"
+  spot_price           = "0.0114"
 
   lifecycle {
     create_before_destroy = true
@@ -69,9 +63,9 @@ resource "aws_launch_configuration" "antifragile-infrastructure" {
 }
 
 resource "aws_autoscaling_group" "antifragile-infrastructure" {
-  name = "${var.name}"
+  name                 = "${var.name}"
 
-  vpc_zone_identifier = [
+  vpc_zone_identifier  = [
     "${var.aws_vpc_private_subnet_ids}",
   ]
 

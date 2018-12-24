@@ -6,7 +6,7 @@ variable "aws_ec2_instance_type" {}
 
 variable "aws_ec2_ami" {}
 
-variable "aws_ec2_public_key" {}
+variable "aws_ec2_public_key_name" {}
 
 variable "aws_vpc_id" {}
 

@@ -19,7 +19,7 @@ module "servers" {
   aws_region                             = "${var.aws_region}"
   aws_ec2_instance_type                  = "${var.aws_ec2_instance_type}"
   aws_ec2_ami                            = "${var.aws_ec2_ami}"
-  aws_ec2_public_key                     = "${var.aws_ec2_public_key}"
+  aws_ec2_public_key_name                = "${var.aws_ec2_public_key_name}"
   aws_vpc_id                             = "${var.aws_vpc_id}"
   aws_vpc_private_subnet_ids             = "${var.aws_vpc_private_subnet_ids}"
   aws_efs_file_system_id                 = "${var.aws_efs_file_system_id}"

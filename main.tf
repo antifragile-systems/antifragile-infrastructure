@@ -13,11 +13,17 @@ provider "template" {
   version = "1.0.0"
 }
 
-module "network" {
-  source         = "./modules/network"
+resource "aws_key_pair" "antifragile-infrastructure" {
+  key_name_prefix = "${var.name}."
+  public_key      = "${var.public_key}"
+}
 
-  name           = "${var.name}"
-  aws_cidr_block = "${var.cidr_block}"
+module "network" {
+  source                  = "./modules/network"
+
+  name                    = "${var.name}"
+  aws_cidr_block          = "${var.cidr_block}"
+  aws_ec2_public_key_name = "${aws_key_pair.antifragile-infrastructure.key_name}"
 }
 
 module "storage" {
@@ -37,7 +43,7 @@ module "cluster" {
   aws_region                             = "${var.aws_region}"
   aws_ec2_instance_type                  = "${var.aws_ec2_instance_type}"
   aws_ec2_ami                            = "${var.aws_ec2_ami}"
-  aws_ec2_public_key                     = "${var.public_key}"
+  aws_ec2_public_key_name                = "${aws_key_pair.antifragile-infrastructure.key_name}"
   aws_vpc_id                             = "${module.network.aws_vpc_id}"
   aws_vpc_private_subnet_ids             = "${module.network.aws_vpc_private_subnet_ids}"
   aws_vpc_public_subnet_ids              = "${module.network.aws_vpc_public_subnet_ids}"
@@ -55,6 +61,15 @@ resource "aws_security_group_rule" "antifragile-infrastructure" {
   protocol                 = "tcp"
   source_security_group_id = "${module.cluster.aws_launch_configuration_security_group_id}"
   security_group_id        = "${module.storage.aws_efs_security_group_id}"
+}
+
+resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_cluster" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = "${module.cluster.aws_launch_configuration_security_group_id}"
+  security_group_id        = "${module.network.aws_nat_security_group_id}"
 }
 
 module "api" {
