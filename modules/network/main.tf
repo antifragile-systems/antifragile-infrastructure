@@ -8,16 +8,13 @@ resource "aws_vpc" "antifragile-infrastructure" {
   }
 }
 
-resource "aws_internet_gateway" "antifragile-infrastructure" {
-  vpc_id = "${aws_vpc.antifragile-infrastructure.id}"
+module "gateways" {
+  source = "./modules/gateways"
 
-  tags {
-    Name = "${var.name}"
-  }
-}
-
-resource "aws_egress_only_internet_gateway" "antifragile-infrastructure" {
-  vpc_id = "${aws_vpc.antifragile-infrastructure.id}"
+  name = "${var.name}"
+  aws_vpc_id = "${aws_vpc.antifragile-infrastructure.id}"
+  aws_vpc_public_subnet_ids = "${module.public_subnets.aws_vpc_subnet_ids}"
+  aws_ec2_public_key_name = "${var.aws_ec2_public_key_name}"
 }
 
 resource "aws_route_table" "antifragile-infrastructure-0" {
@@ -25,12 +22,12 @@ resource "aws_route_table" "antifragile-infrastructure-0" {
 
   route {
     cidr_block  = "0.0.0.0/0"
-    instance_id = "${module.nat.aws_nat_instance_id}"
+    instance_id = "${module.gateways.aws_nat_instance_id}"
   }
 
   route {
     ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = "${aws_egress_only_internet_gateway.antifragile-infrastructure.id}"
+    egress_only_gateway_id = "${module.gateways.aws_egress_only_internet_gateway_id}"
   }
 
   tags {
@@ -43,12 +40,12 @@ resource "aws_route_table" "antifragile-infrastructure-1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.antifragile-infrastructure.id}"
+    gateway_id = "${module.gateways.aws_internet_gateway_id}"
   }
 
   route {
     ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = "${aws_egress_only_internet_gateway.antifragile-infrastructure.id}"
+    egress_only_gateway_id = "${module.gateways.aws_egress_only_internet_gateway_id}"
   }
 
   tags {
@@ -68,15 +65,6 @@ module "public_subnets" {
   aws_ipv6_cidr_block         = "${aws_vpc.antifragile-infrastructure.ipv6_cidr_block}"
   aws_route_table_id          = "${aws_route_table.antifragile-infrastructure-1.id}"
   aws_availability_zone_names = "${data.aws_availability_zones.available.names}"
-}
-
-module "nat" {
-  source                    = "./modules/nat"
-
-  name                      = "${var.name}"
-  aws_vpc_id                = "${aws_vpc.antifragile-infrastructure.id}"
-  aws_vpc_public_subnet_ids = "${module.public_subnets.aws_vpc_subnet_ids}"
-  aws_ec2_public_key_name   = "${var.aws_ec2_public_key_name}"
 }
 
 module "private_subnets" {
