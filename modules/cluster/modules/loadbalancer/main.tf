@@ -16,6 +16,13 @@ resource "aws_security_group" "antifragile-infrastructure" {
     cidr_blocks      = [
       "0.0.0.0/0"
     ]
+  }
+
+  # http
+  ingress {
+    from_port        = "80"
+    to_port          = "80"
+    protocol         = "tcp"
 
     ipv6_cidr_blocks = [
       "::/0"

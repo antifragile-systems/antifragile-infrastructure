@@ -36,3 +36,12 @@ resource "aws_security_group_rule" "antifragile-infrastructure" {
   source_security_group_id = "${module.loadbalancer.aws_alb_security_group_id}"
   security_group_id        = "${module.servers.aws_launch_configuration_security_group_id}"
 }
+
+resource "aws_security_group_rule" "antifragile-infrastructure-1" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  source_security_group_id = "${module.servers.aws_launch_configuration_security_group_id}"
+  security_group_id        = "${module.loadbalancer.aws_alb_security_group_id}"
+}

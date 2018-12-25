@@ -41,6 +41,14 @@ resource "aws_security_group" "antifragile-infrastructure" {
       "0.0.0.0/0",
     ]
   }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    ipv6_cidr_blocks = [
+      "::/0" ]
+  }
 }
 
 resource "aws_launch_configuration" "antifragile-infrastructure" {
