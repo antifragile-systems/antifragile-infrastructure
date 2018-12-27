@@ -13,3 +13,7 @@ output "aws_nat_instance_id" {
 output "aws_nat_security_group_id" {
   value = "${module.nat.aws_nat_security_group_id}"
 }
+
+output "aws_vpn_security_group_id" {
+  value = "${module.vpn.aws_vpn_security_group_id}"
+}

@@ -1,0 +1,44 @@
+#cloud-config
+repo_update: true
+repo_upgrade: security
+
+write_files:
+  - path: /etc/sysctl.conf
+    content: |
+      net.ipv4.ip_forward = 1
+  - path: /etc/strongswan/ipsec.conf
+    content: |
+      config setup
+      	charondebug="net 0, enc 0, ike 0"
+
+      conn %default
+      	keyexchange=ikev2
+      	lifetime=24h
+      	ikelifetime=12h
+
+      conn ${customer_gateway_hostname}
+      	left=%defaultroute
+      	leftid=@${hostname}
+      	leftsubnet=${cidr_block}
+      	right=${customer_gateway_hostname}
+       	rightid=@${customer_gateway_hostname}
+      	keyingtries=%forever
+      	esp=aes256-sha256-modp2048
+      	ike=aes256-sha256-modp2048
+       	authby=secret
+      	dpddelay=5s
+      	dpdtimeout=15s
+      	dpdaction=restart
+       	closeaction=restart
+      	auto=start
+  - path: /etc/strongswan/ipsec.secrets
+    content: |
+      ${hostname} ${customer_gateway_hostname} : PSK "${customer_gateway_psk}"
+
+runcmd:
+  - sysctl -p
+  - iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  - amazon-linux-extras install epel -y
+  - yum install strongswan -y
+  - systemctl enable strongswan
+  - systemctl start strongswan

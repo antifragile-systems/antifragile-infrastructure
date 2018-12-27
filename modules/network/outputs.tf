@@ -21,3 +21,7 @@ output "aws_vpc_default_security_group_id" {
 output "aws_nat_security_group_id" {
   value = "${module.gateways.aws_nat_security_group_id}"
 }
+
+output "aws_vpn_security_group_id" {
+  value = "${module.gateways.aws_vpn_security_group_id}"
+}

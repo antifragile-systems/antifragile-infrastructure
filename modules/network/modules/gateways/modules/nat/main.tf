@@ -41,4 +41,9 @@ resource "aws_spot_instance_request" "nat" {
 
   vpc_security_group_ids      = [
     "${aws_security_group.antifragile-infrastructure.id}" ]
+
+  credit_specification {
+    cpu_credits = "standard"
+  }
+  # https://github.com/terraform-providers/terraform-provider-aws/issues/5651
 }

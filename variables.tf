@@ -6,6 +6,10 @@ variable "domain_name" {}
 
 variable "cidr_block" {}
 
+variable "vpn_customer_gateway_hostname" {}
+
+variable "vpn_customer_gateway_psk" {}
+
 variable "public_key" {}
 
 variable "cluster_min_size" {
