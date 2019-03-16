@@ -31,7 +31,7 @@ resource "aws_security_group" "antifragile-infrastructure" {
 }
 
 resource "aws_alb_target_group" "antifragile-infrastructure" {
-  name     = "${replace(var.name, ".", "-")}"
+  name     = "${var.name}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${var.aws_vpc_id}"
