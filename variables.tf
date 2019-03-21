@@ -33,5 +33,5 @@ variable "aws_ec2_instance_type" {
 }
 
 variable "aws_ec2_ami" {
-  default = "ami-0acc9f8be17a41897"
+  default = "ami-0b8e62ddc09226d0a"
 }
