@@ -6,7 +6,7 @@ terraform {
 
 provider "aws" {
   region  = "${var.aws_region}"
-  version = "1.50"
+  version = "1.60"
 }
 
 provider "template" {
@@ -30,12 +30,16 @@ module "network" {
 }
 
 module "storage" {
-  source                     = "./modules/storage"
+  source = "./modules/storage"
 
-  name                       = "${var.name}"
-  aws_vpc_id                 = "${module.network.aws_vpc_id}"
-  aws_vpc_private_subnet_ids = "${module.network.aws_vpc_private_subnet_ids}"
-  aws_cidr_block             = "${var.cidr_block}"
+  name                         = "${var.name}"
+  aws_vpc_id                   = "${module.network.aws_vpc_id}"
+  aws_vpc_private_subnet_ids   = "${module.network.aws_vpc_private_subnet_ids}"
+  aws_cidr_block               = "${var.cidr_block}"
+  aws_cloudwatch_log_group_arn = "${module.monitor.aws_cloudwatch_log_group_arn}"
+
+  sync_agent_ip_address = "${var.sync_agent_ip_address}"
+  sync_server_hostname  = "${var.sync_server_hostname}"
 }
 
 module "cluster" {
