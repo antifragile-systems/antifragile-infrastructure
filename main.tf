@@ -19,7 +19,7 @@ resource "aws_key_pair" "antifragile-infrastructure" {
 }
 
 module "network" {
-  source                        = "./modules/network"
+  source = "./modules/network"
 
   name                          = "${var.name}"
   domain_name                   = "${var.domain_name}"
@@ -43,7 +43,7 @@ module "storage" {
 }
 
 module "cluster" {
-  source                                 = "./modules/cluster"
+  source = "./modules/cluster"
 
   name                                   = "${var.name}"
   domain_name                            = "${var.domain_name}"
@@ -98,7 +98,7 @@ resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_vpn" {
 }
 
 module "api" {
-  source      = "./modules/api"
+  source = "./modules/api"
 
   name        = "${var.name}"
   domain_name = "${var.domain_name}"
@@ -107,5 +107,5 @@ module "api" {
 module "monitor" {
   source = "./modules/monitor"
 
-  name   = "${var.name}"
+  name = "${var.name}"
 }

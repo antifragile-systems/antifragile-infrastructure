@@ -35,3 +35,7 @@ variable "aws_ec2_instance_type" {
 variable "aws_ec2_ami" {
   default = "ami-0b8e62ddc09226d0a"
 }
+
+variable "sync_agent_ip_address" {}
+
+variable "sync_server_hostname" {}
