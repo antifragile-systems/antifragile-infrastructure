@@ -59,9 +59,9 @@ resource "aws_spot_instance_request" "vpn" {
   key_name                    = "${var.aws_ec2_public_key_name}"
   subnet_id                   = "${var.aws_vpc_public_subnet_ids[0]}"
 
-  spot_price                  = "0.0057"
-  spot_type                   = "one-time"
-  wait_for_fulfillment        = true
+  spot_price           = "0.0057"
+  spot_type            = "persistent"
+  wait_for_fulfillment = true
   # https://github.com/terraform-providers/terraform-provider-aws/issues/2751
 
   vpc_security_group_ids      = [
