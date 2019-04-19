@@ -9,6 +9,11 @@ provider "aws" {
   version = "1.60"
 }
 
+provider "aws" {
+  alias  = "global"
+  region = "us-east-1"
+}
+
 provider "template" {
   version = "1.0.0"
 }
