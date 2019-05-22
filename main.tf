@@ -114,3 +114,9 @@ module "monitor" {
 
   name = "${var.name}"
 }
+
+module "identity" {
+  source = "./modules/identity"
+
+  name = "${var.name}"
+}
