@@ -28,6 +28,13 @@ module "servers" {
   aws_autoscaling_group_desired_capacity = "${var.aws_autoscaling_group_desired_capacity}"
 }
 
+module "serverless" {
+  source = "./modules/serverless"
+
+  name       = "${var.name}"
+  aws_vpc_id = "${var.aws_vpc_id}"
+}
+
 resource "aws_security_group_rule" "antifragile-infrastructure" {
   type                     = "ingress"
   from_port                = 0

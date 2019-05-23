@@ -93,6 +93,24 @@ resource "aws_security_group_rule" "allow_all_traffic_to_cluster_from_vpn" {
   security_group_id        = "${module.cluster.aws_launch_configuration_security_group_id}"
 }
 
+resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_lambda" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = "${module.cluster.aws_lambda_security_group_id}"
+  security_group_id        = "${module.network.aws_nat_security_group_id}"
+}
+
+resource "aws_security_group_rule" "allow_all_traffic_to_lambda_from_vpn" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = "${module.network.aws_vpn_security_group_id}"
+  security_group_id        = "${module.cluster.aws_lambda_security_group_id}"
+}
+
 resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_vpn" {
   type                     = "ingress"
   from_port                = 0
