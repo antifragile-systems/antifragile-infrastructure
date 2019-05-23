@@ -7,7 +7,8 @@ resource "aws_subnet" "antifragile-infrastructure" {
   availability_zone               = "${var.aws_availability_zone_names[count.index]}"
 
   tags {
-    Name = "${var.name}"
+    Name            = "${var.name}"
+    IsPrivateSubnet = "${var.is_ascending_order}"
   }
 }
 
