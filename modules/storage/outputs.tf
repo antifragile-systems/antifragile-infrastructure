@@ -5,3 +5,7 @@ output "aws_efs_file_system_id" {
 output "aws_efs_security_group_id" {
   value = "${aws_security_group.antifragile-infrastructure.id}"
 }
+
+output "aws_database_security_group_id" {
+  value = "${module.database.aws_database_security_group_id}"
+}

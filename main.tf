@@ -45,6 +45,9 @@ module "storage" {
 
   sync_agent_ip_address = "${var.sync_agent_ip_address}"
   sync_server_hostname  = "${var.sync_server_hostname}"
+
+  database_master_username = "${var.database_master_username}"
+  database_master_password = "${var.database_master_password}"
 }
 
 module "cluster" {
@@ -73,6 +76,26 @@ resource "aws_security_group_rule" "antifragile-infrastructure" {
   protocol                 = "tcp"
   source_security_group_id = "${module.cluster.aws_launch_configuration_security_group_id}"
   security_group_id        = "${module.storage.aws_efs_security_group_id}"
+}
+
+resource "aws_security_group_rule" "allow_mysql_traffic_to_database_from_server" {
+  type                     = "ingress"
+  from_port                = 3306
+  # mysql
+  to_port                  = 3306
+  protocol                 = "tcp"
+  source_security_group_id = "${module.cluster.aws_launch_configuration_security_group_id}"
+  security_group_id        = "${module.storage.aws_database_security_group_id}"
+}
+
+resource "aws_security_group_rule" "allow_mysql_traffic_to_database_from_vpn" {
+  type                     = "ingress"
+  from_port                = 3306
+  # mysql
+  to_port                  = 3306
+  protocol                 = "tcp"
+  source_security_group_id = "${module.network.aws_vpn_security_group_id}"
+  security_group_id        = "${module.storage.aws_database_security_group_id}"
 }
 
 resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_cluster" {

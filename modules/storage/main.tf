@@ -48,3 +48,15 @@ module "sync" {
   aws_efs_security_group_id    = "${aws_security_group.antifragile-infrastructure.id}"
   aws_cloudwatch_log_group_arn = "${var.aws_cloudwatch_log_group_arn}"
 }
+
+module "database" {
+  source = "./modules/database"
+
+  name = "${var.name}"
+
+  aws_vpc_id              = "${var.aws_vpc_id}"
+  aws_database_subnet_ids = "${var.aws_vpc_private_subnet_ids}"
+
+  database_master_username = "${var.database_master_username}"
+  database_master_password = "${var.database_master_password}"
+}
