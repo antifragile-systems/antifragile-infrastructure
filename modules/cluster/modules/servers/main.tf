@@ -10,7 +10,22 @@ data "template_file" "user_data" {
 
 resource "aws_iam_role" "antifragile-infrastructure" {
   name               = "${var.name}.ECSInstanceRole"
-  assume_role_policy = "${file("${path.module}/ecs-instance-role.json")}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_iam_role_policy_attachment" "antifragile-infrastructure" {
