@@ -2,15 +2,20 @@ variable "name" {
   default = "antifragile-infrastructure"
 }
 
-variable "domain_name" {}
+variable "domain_name" {
+}
 
-variable "cidr_block" {}
+variable "cidr_block" {
+}
 
-variable "vpn_customer_gateway_hostname" {}
+variable "vpn_customer_gateway_hostname" {
+}
 
-variable "vpn_customer_gateway_psk" {}
+variable "vpn_customer_gateway_psk" {
+}
 
-variable "public_key" {}
+variable "public_key" {
+}
 
 variable "cluster_min_size" {
   default = "1"
@@ -36,10 +41,15 @@ variable "aws_ec2_ami" {
   default = "ami-0b8e62ddc09226d0a"
 }
 
-variable "sync_agent_ip_address" {}
+variable "sync_agent_ip_address" {
+}
 
-variable "sync_server_hostname" {}
+variable "sync_server_hostname" {
+}
 
-variable "database_master_username" {}
+variable "database_master_username" {
+}
 
-variable "database_master_password" {}
+variable "database_master_password" {
+}
+

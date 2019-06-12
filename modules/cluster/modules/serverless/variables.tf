@@ -1,3 +1,6 @@
-variable "name" {}
+variable "name" {
+}
 
-variable "aws_vpc_id" {}
+variable "aws_vpc_id" {
+}
+

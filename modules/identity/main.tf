@@ -282,9 +282,11 @@ resource "aws_iam_policy" "cicd" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_group_policy_attachment" "cicd" {
-  group      = "${aws_iam_group.cicd.name}"
-  policy_arn = "${aws_iam_policy.cicd.arn}"
+  group = aws_iam_group.cicd.name
+  policy_arn = aws_iam_policy.cicd.arn
 }
+

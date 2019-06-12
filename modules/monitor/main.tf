@@ -1,17 +1,23 @@
+provider "aws" {
+  alias = "global"
+}
+
+
 resource "aws_cloudwatch_log_group" "antifragile-infrastructure" {
-  name              = "${var.name}"
+  name              = var.name
   retention_in_days = 30
 }
 
 resource "aws_cloudwatch_log_group" "antifragile-infrastructure-1" {
-  provider = "aws.global"
+  provider = aws.global
 
-  name              = "${var.name}"
+  name              = var.name
   retention_in_days = 30
 }
 
 resource "aws_sns_topic" "antifragile-infrastructure" {
-  provider = "aws.global"
+  provider = aws.global
 
-  name = "${var.name}"
+  name = var.name
 }
+

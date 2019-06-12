@@ -1,7 +1,7 @@
 resource "aws_security_group" "antifragile-infrastructure" {
   name_prefix = "${var.name}.serverless."
   description = "${var.name} serverless security group"
-  vpc_id      = "${var.aws_vpc_id}"
+  vpc_id      = var.aws_vpc_id
 
   lifecycle {
     create_before_destroy = true
@@ -18,15 +18,17 @@ resource "aws_security_group" "antifragile-infrastructure" {
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
     ipv6_cidr_blocks = [
-      "::/0" ]
+      "::/0",
+    ]
   }
 
-  tags {
+  tags = {
     IsAntifragile = true
     Name          = "serverless"
   }
 }
+
