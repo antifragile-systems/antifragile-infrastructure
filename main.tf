@@ -5,17 +5,20 @@ terraform {
 }
 
 provider "aws" {
+  version = "2.14.0"
+
   region  = "${var.aws_region}"
-  version = "1.60"
 }
 
 provider "aws" {
+  version = "2.14.0"
+
   alias  = "global"
   region = "us-east-1"
 }
 
 provider "template" {
-  version = "1.0.0"
+  version = "2.1.2"
 }
 
 resource "aws_key_pair" "antifragile-infrastructure" {
