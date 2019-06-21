@@ -262,8 +262,7 @@ resource "aws_iam_policy" "cicd" {
             "Action": "apigateway:GET",
             "Resource": "arn:aws:apigateway:*::/domainnames"
         },
-
-{
+        {
             "Effect": "Allow",
             "Action": [
                 "iam:CreateRole",
@@ -278,6 +277,13 @@ resource "aws_iam_policy" "cicd" {
                 "cloudformation:DetectStackResourceDrift"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "kms:DescribeKey"
+            ],
+            "Resource": "*"
         }
   ]
 }
@@ -286,7 +292,7 @@ EOF
 }
 
 resource "aws_iam_group_policy_attachment" "cicd" {
-  group = aws_iam_group.cicd.name
+  group      = aws_iam_group.cicd.name
   policy_arn = aws_iam_policy.cicd.arn
 }
 
