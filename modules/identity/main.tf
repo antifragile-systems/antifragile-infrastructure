@@ -242,6 +242,7 @@ resource "aws_iam_policy" "cicd" {
                 "route53:*",
                 "route53domains:*",
                 "cloudfront:ListDistributions",
+                "cloudfront:UpdateDistribution",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticbeanstalk:DescribeEnvironments",
                 "s3:ListBucket",
