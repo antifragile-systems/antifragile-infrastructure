@@ -82,6 +82,10 @@ resource "aws_launch_configuration" "antifragile-infrastructure" {
   user_data = data.template_file.user_data.rendered
   spot_price = "0.0114"
 
+  root_block_device {
+    volume_type = "standard"
+  }
+
   lifecycle {
     create_before_destroy = true
   }
