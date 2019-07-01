@@ -1,15 +1,10 @@
-resource "aws_kms_key" "antifragile-infrastructure" {
-  enable_key_rotation = "true"
-}
-
-resource "aws_kms_alias" "antifragile-infrastructure" {
-  name          = "alias/antifragile-infrastructure/elasticfilesystem"
-  target_key_id = aws_kms_key.antifragile-infrastructure.key_id
+data "aws_kms_key" "antifragile-infrastructure" {
+  key_id = "alias/aws/elasticfilesystem"
 }
 
 resource "aws_efs_file_system" "antifragile-infrastructure" {
   encrypted  = "true"
-  kms_key_id = aws_kms_key.antifragile-infrastructure.arn
+  kms_key_id = data.aws_kms_key.antifragile-infrastructure.arn
 
   tags = {
     Name          = var.name
