@@ -20,3 +20,7 @@ resource "aws_sns_topic" "antifragile-infrastructure" {
   name = var.name
 }
 
+resource "aws_sns_topic" "antifragile-infrastructure-1" {
+  name = var.name
+}
+
