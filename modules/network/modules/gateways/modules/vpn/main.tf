@@ -78,6 +78,16 @@ resource "aws_spot_instance_request" "vpn" {
   # https://github.com/terraform-providers/terraform-provider-aws/issues/5651
 }
 
+
+resource "aws_eip" "vpn" {
+  vpc = true
+}
+
+resource "aws_eip_association" "vpn" {
+  instance_id   = aws_spot_instance_request.vpn.spot_instance_id
+  allocation_id = aws_eip.vpn.id
+}
+
 data "aws_route53_zone" "selected" {
   name         = "${var.domain_name}."
   private_zone = false
@@ -90,7 +100,7 @@ resource "aws_route53_record" "antifragile-infrastructure" {
   ttl     = "300"
 
   records = [
-    aws_spot_instance_request.vpn.public_ip,
+    aws_eip.vpn.public_ip,
   ]
 }
 
