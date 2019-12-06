@@ -34,7 +34,7 @@ variable "aws_region" {
 }
 
 variable "aws_ec2_instance_type" {
-  default = "t3a.small"
+  default = "t3a.micro"
 }
 
 variable "aws_ec2_ami" {
