@@ -9,7 +9,7 @@ variable "aws_vpc_public_subnet_ids" {
 }
 
 variable "aws_ec2_nat_instance_type" {
-  default = "t3.nano"
+  default = "t3a.nano"
 }
 
 variable "aws_ec2_nat_ami" {
