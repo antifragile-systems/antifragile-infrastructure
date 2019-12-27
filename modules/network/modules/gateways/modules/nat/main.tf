@@ -30,20 +30,16 @@ resource "aws_security_group" "antifragile-infrastructure" {
 resource "aws_spot_instance_request" "nat" {
   ami                         = var.aws_ec2_nat_ami
   instance_type               = var.aws_ec2_nat_instance_type
-  associate_public_ip_address = true
-  source_dest_check           = false
   key_name                    = var.aws_ec2_public_key_name
-  subnet_id                   = var.aws_vpc_public_subnet_ids[0]
 
   spot_price           = "0.0051"
   spot_type            = "persistent"
   wait_for_fulfillment = true
 
-  # https://github.com/terraform-providers/terraform-provider-aws/issues/2751
-
-  vpc_security_group_ids = [
-    aws_security_group.antifragile-infrastructure.id,
-  ]
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.nat.id
+  }
 
   credit_specification {
     cpu_credits = "standard"
@@ -51,3 +47,21 @@ resource "aws_spot_instance_request" "nat" {
   # https://github.com/terraform-providers/terraform-provider-aws/issues/5651
 }
 
+resource "aws_eip" "nat" {
+  vpc = true
+}
+
+resource "aws_network_interface" "nat" {
+  subnet_id       = var.aws_vpc_public_subnet_ids[0]
+  security_groups = [
+    aws_security_group.antifragile-infrastructure.id
+  ]
+
+  source_dest_check = false
+}
+
+resource "aws_eip_association" "nat" {
+  allocation_id = aws_eip.nat.id
+
+  network_interface_id = aws_network_interface.nat.id
+}
