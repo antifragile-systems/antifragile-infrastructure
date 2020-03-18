@@ -22,6 +22,7 @@ write_files:
       	leftsubnet=${cidr_block}
       	right=${customer_gateway_hostname}
        	rightid=@${customer_gateway_hostname}
+        rightsubnet=${customer_gateway_cidr_block}
       	keyingtries=%forever
       	esp=aes256-sha256-modp2048
       	ike=aes256-sha256-modp2048

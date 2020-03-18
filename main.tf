@@ -30,12 +30,13 @@ resource "aws_key_pair" "antifragile-infrastructure" {
 module "network" {
   source = "./modules/network"
 
-  name                          = var.name
-  domain_name                   = var.domain_name
-  cidr_block                    = var.cidr_block
-  vpn_customer_gateway_hostname = var.vpn_customer_gateway_hostname
-  vpn_customer_gateway_psk      = var.vpn_customer_gateway_psk
-  aws_ec2_public_key_name       = aws_key_pair.antifragile-infrastructure.key_name
+  name                            = var.name
+  domain_name                     = var.domain_name
+  cidr_block                      = var.cidr_block
+  vpn_customer_gateway_hostname   = var.vpn_customer_gateway_hostname
+  vpn_customer_gateway_cidr_block = var.vpn_customer_gateway_cidr_block
+  vpn_customer_gateway_psk        = var.vpn_customer_gateway_psk
+  aws_ec2_public_key_name         = aws_key_pair.antifragile-infrastructure.key_name
 }
 
 module "storage" {
@@ -114,6 +115,16 @@ resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_cluster" {
   security_group_id        = module.network.aws_nat_security_group_id
 }
 
+resource "aws_security_group_rule" "allow_all_traffic_to_vpn_from_cluster" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = module.cluster.aws_launch_configuration_security_group_id
+  security_group_id        = module.network.aws_vpn_security_group_id
+}
+
+
 resource "aws_security_group_rule" "allow_all_traffic_to_cluster_from_vpn" {
   type                     = "ingress"
   from_port                = 0
@@ -130,6 +141,15 @@ resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_lambda" {
   protocol                 = "-1"
   source_security_group_id = module.cluster.aws_lambda_security_group_id
   security_group_id        = module.network.aws_nat_security_group_id
+}
+
+resource "aws_security_group_rule" "allow_all_traffic_to_vpn_from_lambda" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = module.cluster.aws_lambda_security_group_id
+  security_group_id        = module.network.aws_vpn_security_group_id
 }
 
 resource "aws_security_group_rule" "allow_all_traffic_to_lambda_from_vpn" {

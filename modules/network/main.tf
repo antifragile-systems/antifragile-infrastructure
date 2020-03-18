@@ -11,14 +11,15 @@ resource "aws_vpc" "antifragile-infrastructure" {
 module "gateways" {
   source = "./modules/gateways"
 
-  name                          = var.name
-  domain_name                   = var.domain_name
-  cidr_block                    = var.cidr_block
-  vpn_customer_gateway_hostname = var.vpn_customer_gateway_hostname
-  vpn_customer_gateway_psk      = var.vpn_customer_gateway_psk
-  aws_vpc_id                    = aws_vpc.antifragile-infrastructure.id
-  aws_vpc_public_subnet_ids     = module.public_subnets.aws_vpc_subnet_ids
-  aws_ec2_public_key_name       = var.aws_ec2_public_key_name
+  name                            = var.name
+  domain_name                     = var.domain_name
+  cidr_block                      = var.cidr_block
+  vpn_customer_gateway_hostname   = var.vpn_customer_gateway_hostname
+  vpn_customer_gateway_cidr_block = var.vpn_customer_gateway_cidr_block
+  vpn_customer_gateway_psk        = var.vpn_customer_gateway_psk
+  aws_vpc_id                      = aws_vpc.antifragile-infrastructure.id
+  aws_vpc_public_subnet_ids       = module.public_subnets.aws_vpc_subnet_ids
+  aws_ec2_public_key_name         = var.aws_ec2_public_key_name
 }
 
 resource "aws_route_table" "antifragile-infrastructure-0" {
@@ -27,6 +28,11 @@ resource "aws_route_table" "antifragile-infrastructure-0" {
   route {
     cidr_block  = "0.0.0.0/0"
     instance_id = module.gateways.aws_nat_instance_id
+  }
+
+  route {
+    cidr_block  = var.vpn_customer_gateway_cidr_block
+    instance_id = module.gateways.aws_vpn_instance_id
   }
 
   route {

@@ -18,3 +18,6 @@ output "aws_vpn_security_group_id" {
   value = module.vpn.aws_vpn_security_group_id
 }
 
+output "aws_vpn_instance_id" {
+  value = module.vpn.aws_vpn_instance_id
+}

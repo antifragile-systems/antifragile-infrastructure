@@ -11,16 +11,6 @@ resource "aws_security_group" "antifragile-infrastructure" {
     create_before_destroy = true
   }
 
-  ingress {
-    from_port = 4500
-    to_port   = 4500
-    protocol  = "udp"
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
-
   egress {
     from_port = 0
     to_port   = 0
@@ -32,37 +22,50 @@ resource "aws_security_group" "antifragile-infrastructure" {
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
     ipv6_cidr_blocks = [
       "::/0",
     ]
   }
 }
 
+resource "aws_security_group_rule" "antifragile-infrastructure" {
+  type                     = "ingress"
+  from_port                = 4500
+  to_port                  = 4500
+  protocol                 = "udp"
+  security_group_id        = aws_security_group.antifragile-infrastructure.id
+
+  cidr_blocks = [
+    "0.0.0.0/0",
+  ]
+}
+
 data "template_file" "user_data" {
   template = file("${path.module}/user-data.yml")
 
   vars = {
-    hostname                  = local.hostname
-    cidr_block                = var.cidr_block
-    customer_gateway_hostname = var.vpn_customer_gateway_hostname
-    customer_gateway_psk      = var.vpn_customer_gateway_psk
+    hostname                    = local.hostname
+    cidr_block                  = var.cidr_block
+    customer_gateway_hostname   = var.vpn_customer_gateway_hostname
+    customer_gateway_cidr_block = var.vpn_customer_gateway_cidr_block
+    customer_gateway_psk        = var.vpn_customer_gateway_psk
   }
 }
 
 resource "aws_spot_instance_request" "vpn" {
-  ami                         = var.aws_ec2_vpn_ami
-  instance_type               = var.aws_ec2_vpn_instance_type
-  key_name                    = var.aws_ec2_public_key_name
+  ami           = var.aws_ec2_vpn_ami
+  instance_type = var.aws_ec2_vpn_instance_type
+  key_name      = var.aws_ec2_public_key_name
 
   spot_price           = "0.0051"
   spot_type            = "persistent"
   wait_for_fulfillment = true
 
   network_interface {
-    device_index = 0
+    device_index         = 0
     network_interface_id = aws_network_interface.vpn.id
   }
 
@@ -79,7 +82,7 @@ resource "aws_eip" "vpn" {
 }
 
 resource "aws_network_interface" "vpn" {
-  subnet_id       = var.aws_vpc_public_subnet_ids[0]
+  subnet_id       = var.aws_vpc_public_subnet_ids[ 0 ]
   security_groups = [
     aws_security_group.antifragile-infrastructure.id
   ]

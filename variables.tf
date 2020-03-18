@@ -11,6 +11,9 @@ variable "cidr_block" {
 variable "vpn_customer_gateway_hostname" {
 }
 
+variable "vpn_customer_gateway_cidr_block" {
+}
+
 variable "vpn_customer_gateway_psk" {
 }
 
