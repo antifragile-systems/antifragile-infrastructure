@@ -71,6 +71,8 @@ resource "aws_api_gateway_stage" "antifragile-infrastructure" {
     "host"        = "api.${var.domain_name}"
   }
 
+  xray_tracing_enabled = true
+
   lifecycle {
     ignore_changes = [
       variables,
@@ -104,3 +106,67 @@ resource "aws_route53_record" "antifragile-infrastructure" {
   ]
 }
 
+resource "aws_cloudwatch_metric_alarm" "antifragile-infrastructure-1" {
+  alarm_name = "api server error"
+
+  metric_name = "5XXError"
+  namespace   = "AWS/ApiGateway"
+
+  dimensions = {
+    ApiName = var.name
+  }
+
+  threshold           = 2
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  period              = 60
+  statistic           = "Sum"
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [
+    var.aws_sns_topic_arn
+  ]
+  ok_actions    = [
+    var.aws_sns_topic_arn
+  ]
+}
+
+resource "aws_cloudwatch_metric_alarm" "antifragile-infrastructure" {
+  alarm_name = "api client error"
+
+  comparison_operator = "GreaterThanUpperThreshold"
+  evaluation_periods  = 2
+  treat_missing_data  = "notBreaching"
+
+  threshold_metric_id = "e1"
+
+  metric_query {
+    id          = "e1"
+    expression  = "ANOMALY_DETECTION_BAND(m1)"
+    label       = "4XXError (Expected)"
+    return_data = "true"
+  }
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+
+    metric {
+      metric_name = "4XXError"
+      namespace   = "AWS/ApiGateway"
+      period      = 60
+      stat        = "Sum"
+
+      dimensions = {
+        ApiName = var.name
+      }
+    }
+  }
+
+  alarm_actions = [
+    var.aws_sns_topic_arn
+  ]
+  ok_actions    = [
+    var.aws_sns_topic_arn
+  ]
+}

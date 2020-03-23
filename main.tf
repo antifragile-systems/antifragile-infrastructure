@@ -6,13 +6,13 @@ terraform {
 }
 
 provider "aws" {
-  version = "2.14.0"
+  version = "2.54.0"
 
   region = var.aws_region
 }
 
 provider "aws" {
-  version = "2.14.0"
+  version = "2.54.0"
 
   alias  = "global"
   region = "us-east-1"
@@ -173,8 +173,13 @@ resource "aws_security_group_rule" "allow_all_traffic_to_nat_from_vpn" {
 module "api" {
   source = "./modules/api"
 
-  name        = var.name
-  domain_name = var.domain_name
+  providers = {
+
+  }
+
+  name              = var.name
+  domain_name       = var.domain_name
+  aws_sns_topic_arn = module.monitor.aws_sns_topic_arn
 }
 
 module "monitor" {
