@@ -32,6 +32,23 @@ resource "aws_efs_mount_target" "antifragile-infrastructure" {
   ]
 }
 
+resource "aws_s3_bucket" "antifragile-infrastructure" {
+  bucket_prefix = "${var.name}."
+  acl           = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+
+  tags = {
+    IsAntifragile = true
+  }
+}
+
 module "sync" {
   source = "./modules/sync"
 
@@ -40,7 +57,7 @@ module "sync" {
   nfs_server_hostname = var.sync_server_hostname
 
   aws_vpc_id                   = var.aws_vpc_id
-  aws_efs_mount_target_id      = aws_efs_mount_target.antifragile-infrastructure[0].id
+  aws_efs_mount_target_id      = aws_efs_mount_target.antifragile-infrastructure[ 0 ].id
   aws_efs_security_group_id    = aws_security_group.antifragile-infrastructure.id
   aws_cloudwatch_log_group_arn = var.aws_cloudwatch_log_group_arn
 }

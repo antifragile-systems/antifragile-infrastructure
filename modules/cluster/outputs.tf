@@ -9,4 +9,3 @@ output "aws_launch_configuration_security_group_id" {
 output "aws_lambda_security_group_id" {
   value = module.serverless.aws_lambda_security_group_id
 }
-

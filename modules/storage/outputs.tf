@@ -10,3 +10,6 @@ output "aws_database_security_group_id" {
   value = module.database.aws_database_security_group_id
 }
 
+output "aws_s3_bucket" {
+  value = aws_s3_bucket.antifragile-infrastructure.id
+}
