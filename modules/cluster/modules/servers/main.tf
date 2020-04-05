@@ -81,6 +81,7 @@ resource "aws_launch_configuration" "antifragile-infrastructure" {
   iam_instance_profile = aws_iam_instance_profile.antifragile-infrastructure.name
   user_data = data.template_file.user_data.rendered
   spot_price = "0.0102"
+  enable_monitoring = false
 
   root_block_device {
     volume_type = "standard"

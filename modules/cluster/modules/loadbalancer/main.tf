@@ -47,6 +47,10 @@ resource "aws_alb" "antifragile-infrastructure" {
   security_groups = [
     aws_security_group.antifragile-infrastructure.id,
   ]
+
+  tags = {
+    IsAntifragile = true
+  }
 }
 
 resource "aws_alb_listener" "antifragile-infrastructure-0" {
