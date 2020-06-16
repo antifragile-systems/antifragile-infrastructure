@@ -27,24 +27,53 @@ resource "aws_security_group" "antifragile-infrastructure" {
   }
 }
 
-resource "aws_spot_instance_request" "nat" {
-  ami                         = var.aws_ec2_nat_ami
-  instance_type               = var.aws_ec2_nat_instance_type
-  key_name                    = var.aws_ec2_public_key_name
+resource "aws_launch_template" "nat" {
+  name_prefix = "${var.name}.nat."
 
-  spot_price           = "0.0051"
-  spot_type            = "persistent"
-  wait_for_fulfillment = true
+  image_id = var.aws_ec2_nat_ami
+  instance_type = var.aws_ec2_nat_instance_type
+  key_name      = var.aws_ec2_public_key_name
 
-  network_interface {
-    device_index = 0
+  instance_market_options {
+    market_type = "spot"
+
+    spot_options {
+      max_price = "0.0051"
+      spot_instance_type = "one-time"
+    }
+  }
+
+  monitoring {
+    enabled = true
+  }
+
+  network_interfaces {
+    device_index         = 0
     network_interface_id = aws_network_interface.nat.id
   }
+}
 
-  credit_specification {
-    cpu_credits = "standard"
+data "aws_subnet" "selected" {
+  id = var.aws_vpc_public_subnet_ids[ 0 ]
+}
+
+resource "aws_autoscaling_group" "vpn" {
+  name_prefix = "${var.name}.nat."
+
+  min_size = 1
+  max_size = 1
+  desired_capacity = 1
+
+  availability_zones = [ data.aws_subnet.selected.availability_zone ]
+
+  launch_template {
+    id      = aws_launch_template.nat.id
+    version = "$Latest"
   }
-  # https://github.com/terraform-providers/terraform-provider-aws/issues/5651
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_eip" "nat" {

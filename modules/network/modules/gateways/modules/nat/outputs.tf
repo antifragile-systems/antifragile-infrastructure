@@ -1,5 +1,5 @@
-output "aws_nat_instance_id" {
-  value = aws_spot_instance_request.nat.spot_instance_id
+output "aws_nat_network_interface_id" {
+  value = aws_network_interface.nat.id
 }
 
 output "aws_nat_security_group_id" {

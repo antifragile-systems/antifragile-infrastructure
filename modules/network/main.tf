@@ -27,12 +27,12 @@ resource "aws_route_table" "antifragile-infrastructure-0" {
 
   route {
     cidr_block  = "0.0.0.0/0"
-    instance_id = module.gateways.aws_nat_instance_id
+    network_interface_id = module.gateways.aws_nat_network_interface_id
   }
 
   route {
-    cidr_block  = var.vpn_customer_gateway_cidr_block
-    instance_id = module.gateways.aws_vpn_instance_id
+    cidr_block           = var.vpn_customer_gateway_cidr_block
+    network_interface_id = module.gateways.aws_vpn_network_interface_id
   }
 
   route {

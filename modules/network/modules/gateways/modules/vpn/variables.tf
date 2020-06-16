@@ -33,4 +33,3 @@ variable "aws_ec2_vpn_ami" {
 
 variable "aws_ec2_public_key_name" {
 }
-
