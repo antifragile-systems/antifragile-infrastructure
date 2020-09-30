@@ -64,6 +64,8 @@ resource "aws_launch_template" "vpn" {
 
   user_data = base64encode(data.template_file.user_data.rendered)
 
+  update_default_version = true
+
   instance_market_options {
     market_type = "spot"
 

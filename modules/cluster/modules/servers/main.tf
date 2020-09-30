@@ -77,6 +77,8 @@ resource "aws_launch_template" "servers" {
 
   user_data = base64encode(data.template_file.user_data.rendered)
 
+  update_default_version = true
+
   vpc_security_group_ids = [
     aws_security_group.antifragile-infrastructure.id ]
 
@@ -98,7 +100,7 @@ resource "aws_launch_template" "servers" {
     market_type = "spot"
 
     spot_options {
-      max_price          = "0.0102"
+      max_price          = "0.012"
       spot_instance_type = "one-time"
     }
   }

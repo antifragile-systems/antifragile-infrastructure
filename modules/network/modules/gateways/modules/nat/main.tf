@@ -34,6 +34,8 @@ resource "aws_launch_template" "nat" {
   instance_type = var.aws_ec2_nat_instance_type
   key_name      = var.aws_ec2_public_key_name
 
+  update_default_version = true
+
   instance_market_options {
     market_type = "spot"
 

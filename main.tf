@@ -6,13 +6,13 @@ terraform {
 }
 
 provider "aws" {
-  version = "2.54.0"
+  version = "2.70.0"
 
   region = var.aws_region
 }
 
 provider "aws" {
-  version = "2.54.0"
+  version = "2.70.0"
 
   alias  = "global"
   region = "us-east-1"
