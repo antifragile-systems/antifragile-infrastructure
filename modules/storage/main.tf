@@ -44,9 +44,84 @@ resource "aws_s3_bucket" "antifragile-infrastructure" {
     }
   }
 
+  lifecycle_rule {
+    id      = "log"
+    enabled = true
+
+    prefix = "log/"
+
+    tags = {
+      "rule"      = "log"
+      "autoclean" = "true"
+    }
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    transition {
+      days          = 60
+      storage_class = "GLACIER"
+    }
+
+    expiration {
+      days = 90
+    }
+  }
+
   tags = {
     IsAntifragile = true
   }
+}
+
+
+data "aws_elb_service_account" "current" {
+
+}
+
+data "aws_caller_identity" "current" {
+}
+
+data "aws_iam_policy_document" "log_bucket_policy" {
+  statement {
+    actions   = [
+      "s3:PutObject" ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/loadbalancer/*" ]
+    principals {
+      type        = "AWS"
+      identifiers = [
+        data.aws_elb_service_account.current.arn ]
+    }
+  }
+
+  statement {
+    actions   = [
+      "s3:PutObject" ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/storage/*" ]
+    principals {
+      type        = "AWS"
+      identifiers = [ data.aws_caller_identity.current.arn ]
+    }
+  }
+
+  statement {
+    actions   = [
+      "s3:PutObject" ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/cdn/*" ]
+    principals {
+      type        = "AWS"
+      identifiers = [ data.aws_caller_identity.current.arn ]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "log" {
+  bucket = aws_s3_bucket.antifragile-infrastructure.id
+  policy = data.aws_iam_policy_document.log_bucket_policy.json
 }
 
 module "sync" {

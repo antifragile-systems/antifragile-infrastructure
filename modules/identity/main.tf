@@ -4,7 +4,7 @@ resource "aws_iam_group" "cicd" {
 
 resource "aws_iam_policy" "cicd" {
   name        = "${var.name}.ContinousIntegrationContinousDeploymentAccess"
-  description = "Provides full access to selected AWS services and resources for Continous Integration/Continous Deployment purposes"
+  description = "Provides full access to selected AWS services and resources for Continous Integration/Continuous Deployment purposes"
 
   policy = <<EOF
 {
