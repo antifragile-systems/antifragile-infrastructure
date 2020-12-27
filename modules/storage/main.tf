@@ -83,45 +83,40 @@ data "aws_elb_service_account" "current" {
 data "aws_caller_identity" "current" {
 }
 
-data "aws_iam_policy_document" "log_bucket_policy" {
-  statement {
-    actions   = [
-      "s3:PutObject" ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/loadbalancer/*" ]
-    principals {
-      type        = "AWS"
-      identifiers = [
-        data.aws_elb_service_account.current.arn ]
-    }
-  }
-
-  statement {
-    actions   = [
-      "s3:PutObject" ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/storage/*" ]
-    principals {
-      type        = "AWS"
-      identifiers = [ data.aws_caller_identity.current.arn ]
-    }
-  }
-
-  statement {
-    actions   = [
-      "s3:PutObject" ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/cdn/*" ]
-    principals {
-      type        = "AWS"
-      identifiers = [ data.aws_caller_identity.current.arn ]
-    }
-  }
-}
-
 resource "aws_s3_bucket_policy" "log" {
   bucket = aws_s3_bucket.antifragile-infrastructure.id
-  policy = data.aws_iam_policy_document.log_bucket_policy.json
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${data.aws_elb_service_account.current.arn}"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/loadbalancer/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${data.aws_caller_identity.current.arn}"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/storage/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${data.aws_caller_identity.current.arn}"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.antifragile-infrastructure.id}/log/cdn/*"
+    }
+  ]
+}
+EOF
 }
 
 module "sync" {
